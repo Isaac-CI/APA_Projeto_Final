@@ -6,6 +6,7 @@
 #include <vector>
 #include <sstream>
 
+
 class JobXServer {
     public:
         int n, m;
