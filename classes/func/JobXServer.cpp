@@ -1,4 +1,4 @@
-#include "JobXServer.h"
+#include "../interfaces/JobXServer.h"
 
 JobXServer::JobXServer(const char *path){
     std::fstream file;

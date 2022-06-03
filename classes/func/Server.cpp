@@ -1,4 +1,4 @@
-#include "Server.h"
+#include "../interfaces/Server.h"
 
 Server::Server(int id, int custoParaServidor, std::vector <Jobs> jobs){
     this->id = id;

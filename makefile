@@ -1,2 +1,2 @@
 all:
-	g++ *.cpp -o Exec; mv Exec exec; exec/Exec
+	g++ main.cpp ./classes/func/*.cpp -o Exec; mv Exec exec; exec/Exec
