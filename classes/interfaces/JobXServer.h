@@ -9,7 +9,7 @@
 
 class JobXServer {
     public:
-        int n, m;
+        int n, m, p;
         std::vector <std::vector <int>> T, C;
         std::vector<int> b;
         

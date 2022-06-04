@@ -3,7 +3,7 @@
 
 class Jobs{
     public:
-        int id, tempo, custo;
+        int id, tempo, custo, allocatedServerID;
         Jobs(int id, int tempo, int custo);
 };
 

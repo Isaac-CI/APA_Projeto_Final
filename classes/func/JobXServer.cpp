@@ -24,6 +24,7 @@ JobXServer::JobXServer(const char *path){
     // storing the numbers of jobs and servers
     n = stoi(lines[0]);
     m = stoi(lines[1]);
+    p = stoi(lines[2]);
 
     // reading the capacity of each sever and storing into a vector
     std::stringstream bString(lines[3]);
