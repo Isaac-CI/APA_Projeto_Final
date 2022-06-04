@@ -2,12 +2,33 @@
 #include <vector>
 #include <algorithm>
 
+using namespace std;
+
 struct Solution{
     std::vector <Server> servers;
     std::vector <Jobs> nonAllocatedJobs;
     int solutionCost;
+    int serverAmmount;
     //bool isValid;
 };
+
+void printSolution(Solution s){
+    std::cout << "quantidade de servers: " <<s.serverAmmount << std::endl;
+    for(unsigned int i = 0; i < s.serverAmmount; i++){
+        for(unsigned int j = 0; j < s.servers[i].jobAmmount; j++){
+            if(s.servers[i].id == s.servers[i].jobs[j].allocatedServerID){
+                std::cout << "O Job " << s.servers[i].jobs[j].id << " foi alocado ao Server " 
+                        << s.servers[i].id << " custando " << s.servers[i].jobs[j].custo << " e demorando " 
+                                    << s.servers[i].jobs[j].tempo << " para ser executado." << std::endl;
+            }
+        }
+    }
+    for(unsigned int i = 0; i < sizeof(s.nonAllocatedJobs) / sizeof(Jobs); i++){
+        std::cout << "O Job " << s.nonAllocatedJobs[i].id 
+        << " não foi alocado em nenhum dos servidores externos, por isso, foi alocado no servidor local, com um custo de: "
+        << s.nonAllocatedJobs[i].custo << std::endl;
+    }
+}
 
 bool comparator(const Jobs& lhs, const Jobs& rhs) {
    return lhs.tempo < rhs.tempo;
@@ -31,8 +52,10 @@ Greedy::Greedy(JobXServer instance){
         for(int j = 0; j < n; j++) {
             jobs.push_back(Jobs(j+1,T[i][j], C[i][j]));
         }
-        servers.push_back(Server(i+1,0,jobs)); // initial cost of each server is 0
+        servers.push_back(Server(i+1,0,jobs, n)); // initial cost of each server is 0
     }
+    std::cout << "tamanho dos servidores:" << sizeof(servers) << std::endl;
+    std::cout << "tamanho do tipo servidor:" << sizeof(Server) << std::endl;
 
     // data to work with: servers
 
@@ -68,6 +91,7 @@ Greedy::Greedy(JobXServer instance){
     
     Solution solution;
     solution.servers = servers;
+    solution.serverAmmount = m;
     solution.solutionCost = 0;
     for(unsigned int j = 0; j < n; j++){
         if(!isJobAssigned[j]){
@@ -80,6 +104,8 @@ Greedy::Greedy(JobXServer instance){
         solution.solutionCost += servers[i].custoParaServidor;
     }
     
+    printSolution(solution);
+
     // prints the values for the sake of debugging
     // for(int i = 0;i < m; i++){
     //     for(int j = 0; j < n; j++){
