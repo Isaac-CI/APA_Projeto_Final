@@ -4,29 +4,23 @@
 
 using namespace std;
 
-struct Solution{
-    std::vector <Server> servers;
-    std::vector <Jobs> nonAllocatedJobs;
-    int solutionCost;
-    int serverAmmount;
-    //bool isValid;
-};
 
-void printSolution(Solution s){
-    std::cout << "quantidade de servers: " <<s.serverAmmount << std::endl;
-    for(unsigned int i = 0; i < s.serverAmmount; i++){
-        for(unsigned int j = 0; j < s.servers[i].jobAmmount; j++){
-            if(s.servers[i].id == s.servers[i].jobs[j].allocatedServerID){
-                std::cout << "O Job " << s.servers[i].jobs[j].id << " foi alocado ao Server " 
-                        << s.servers[i].id << " custando " << s.servers[i].jobs[j].custo << " e demorando " 
-                                    << s.servers[i].jobs[j].tempo << " para ser executado." << std::endl;
+
+void printSolution(Solution* s){
+    std::cout << "quantidade de servers: " <<s->serverAmmount << std::endl;
+    for(unsigned int i = 0; i < s->serverAmmount; i++){
+        for(unsigned int j = 0; j < s->servers[i].jobAmmount; j++){
+            if(s->servers[i].id == s->servers[i].jobs[j].allocatedServerID){
+                std::cout << "O Job " << s->servers[i].jobs[j].id << " foi alocado ao Server " 
+                        << s->servers[i].id << " custando " << s->servers[i].jobs[j].custo << " e demorando " 
+                                    << s->servers[i].jobs[j].tempo << " para ser executado." << std::endl;
             }
         }
     }
-    for(unsigned int i = 0; i < sizeof(s.nonAllocatedJobs) / sizeof(Jobs); i++){
-        std::cout << "O Job " << s.nonAllocatedJobs[i].id 
+    for(unsigned int i = 0; i < sizeof(s->nonAllocatedJobs) / sizeof(Jobs); i++){
+        std::cout << "O Job " << s->nonAllocatedJobs[i].id 
         << " não foi alocado em nenhum dos servidores externos, por isso, foi alocado no servidor local, com um custo de: "
-        << s.nonAllocatedJobs[i].custo << std::endl;
+        << s->nonAllocatedJobs[i].custo << std::endl;
     }
 }
 
@@ -39,7 +33,7 @@ Server sortJobsInServer(Server s){
     return s;
 }
 
-Greedy::Greedy(JobXServer instance){
+Greedy::Greedy(JobXServer instance, Solution* solution){
     int m = instance.m, n = instance.n;
     std::vector <std::vector <int>> T = instance.T; //time
     std::vector <std::vector <int>> C = instance.C; // costs
@@ -54,17 +48,14 @@ Greedy::Greedy(JobXServer instance){
         }
         servers.push_back(Server(i+1,0,jobs, n)); // initial cost of each server is 0
     }
-    std::cout << "tamanho dos servidores:" << sizeof(servers) << std::endl;
-    std::cout << "tamanho do tipo servidor:" << sizeof(Server) << std::endl;
 
     // data to work with: servers
 
     // first step: Sorting the vectors
 
-    for(int i = 0;i < m; i++){
+    for(int i = 0; i < m; i++){
         sortJobsInServer(servers[i]);
     }
-
 
     //second step: iterate for each server adding jobs given each server capacity
 
@@ -88,20 +79,18 @@ Greedy::Greedy(JobXServer instance){
             }
         }
     }
-    
-    Solution solution;
-    solution.servers = servers;
-    solution.serverAmmount = m;
-    solution.solutionCost = 0;
+    solution->servers = servers;//segfault
+    solution->serverAmmount = m;
+    solution->solutionCost = 0;
     for(unsigned int j = 0; j < n; j++){
         if(!isJobAssigned[j]){
-            solution.nonAllocatedJobs.push_back(Jobs(j+1, 0, instance.p));
-            solution.solutionCost += instance.p;
+            solution->nonAllocatedJobs.push_back(Jobs(j+1, 0, instance.p));
+            solution->solutionCost += instance.p;
         }
     }
 
     for(unsigned int i; i < n; i++){
-        solution.solutionCost += servers[i].custoParaServidor;
+        solution->solutionCost += servers[i].custoParaServidor;
     }
     
     printSolution(solution);
