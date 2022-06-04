@@ -72,6 +72,7 @@ Greedy::Greedy(JobXServer instance){
     for(unsigned int j = 0; j < n; j++){
         if(!isJobAssigned[j]){
             solution.nonAllocatedJobs.push_back(Jobs(j+1, 0, instance.p));
+            solution.solutionCost += instance.p;
         }
     }
 
