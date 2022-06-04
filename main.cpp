@@ -6,9 +6,11 @@
 
 int main(void){
 
-    JobXServer instance = JobXServer("./input.txt");
+    JobXServer instance = JobXServer("./input2.txt");
+
+    instance.printProblemInput();
     
-    Greedy guloso = Greedy(instance);
+    //Greedy guloso = Greedy(instance);
    
     return 0;
 }
