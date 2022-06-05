@@ -33,7 +33,16 @@ Server sortJobsInServer(Server s){
     return s;
 }
 
-Greedy::Greedy(JobXServer instance, Solution* solution){
+Greedy::Greedy(){
+    this->data = NULL;
+    this->solution.nonAllocatedJobs = {};
+    this->solution.serverAmmount = 0;
+    this->solution.servers = {};
+    this->solution.solutionCost = -1;
+}
+
+Greedy::Greedy(JobXServer instance){
+    this->data = instance;
     int m = instance.m, n = instance.n;
     std::vector <std::vector <int>> T = instance.T; //time
     std::vector <std::vector <int>> C = instance.C; // costs
@@ -79,7 +88,8 @@ Greedy::Greedy(JobXServer instance, Solution* solution){
             }
         }
     }
-    solution->servers = servers;//segfault
+    Solution* solution = (Solution*) std::calloc(1, sizeof(Solution));
+    solution->servers = servers;
     solution->serverAmmount = m;
     solution->solutionCost = 0;
     for(unsigned int j = 0; j < n; j++){
@@ -94,6 +104,7 @@ Greedy::Greedy(JobXServer instance, Solution* solution){
     }
     
     printSolution(solution);
+    this->solution = *solution;
 
     // prints the values for the sake of debugging
     // for(int i = 0;i < m; i++){

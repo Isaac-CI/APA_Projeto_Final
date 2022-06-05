@@ -6,12 +6,11 @@
 
 int main(void){
 
-    JobXServer instance = JobXServer("./input2.txt");
-    Solution* solution = (Solution*) std::calloc(1, sizeof(Solution));
+    JobXServer instance = JobXServer("./input2.txt");  
 
     instance.printProblemInput();
     
-    Greedy guloso = Greedy(instance, solution);
+    Greedy guloso = Greedy(instance);
    
     return 0;
 }

@@ -1,5 +1,5 @@
-#ifndef JOBXSERVER_
-#define JOBXSERVER_
+#ifndef JOBXSERVER_H
+#define JOBXSERVER_H
 
 #include <iostream>
 #include <fstream>
@@ -14,6 +14,7 @@ class JobXServer {
         std::vector<int> b;
         
         JobXServer(const char*);
+        JobXServer();
         void printProblemInput();
 
 };

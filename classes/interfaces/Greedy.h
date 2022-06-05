@@ -1,10 +1,9 @@
-#ifndef GREEDY_
-#define GREEDY_
-
-
+#ifndef GREEDY_H
+#define GREEDY_H
 
 #include "JobXServer.h"
 #include "Server.h"
+
 
 typedef struct Solution{
     std::vector <Server> servers;
@@ -17,10 +16,10 @@ typedef struct Solution{
 
 class Greedy{
     public:
-        int custoTotal;
-        std::vector <Server> servers;
-
-        Greedy(JobXServer instance, Solution* solution);
+        Solution solution;
+        JobXServer data;
+        Greedy(JobXServer instance);
+        Greedy();
 
 };
 

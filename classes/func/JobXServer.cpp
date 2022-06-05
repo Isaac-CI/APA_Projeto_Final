@@ -18,6 +18,15 @@ std::vector<int> getVectorNumberFromString(string s) {
    return vetor;
 }
 
+JobXServer::JobXServer(){
+    this->b = {};
+    this->C = {};
+    this->m = 0;
+    this->n = 0;
+    this->p = 0;
+    this->T = {};
+}
+
 JobXServer::JobXServer(const char *path){
     std::fstream file;
     std::vector<std::string> lines;
