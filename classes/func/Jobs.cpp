@@ -4,5 +4,4 @@ Jobs::Jobs(int id, int tempo, int custo){
     this->id = id;
     this->tempo = tempo;
     this->custo = custo;
-    this->allocatedServerID = -1;
 }

@@ -5,9 +5,10 @@
 #include "Server.h"
 
 
-typedef struct Solution{
+struct Solution{
     std::vector <Server> servers;
     std::vector <Jobs> nonAllocatedJobs;
+    std::vector  <int> timeSpentPerServer;
     int solutionCost;
     int serverAmmount;
     //bool isValid;
