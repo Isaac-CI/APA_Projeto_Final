@@ -6,8 +6,7 @@ using namespace std;
 
 
 
-void printSolution(Solution* s){
-    std::cout << "quantidade de servers: " <<s->serverAmmount << std::endl;
+void Greedy::printSolution(Solution* s){
     for(unsigned int i = 0; i < s->serverAmmount; i++){
         for(unsigned int j = 0; j < s->servers[i].jobAmmount; j++){
             std::cout << "O Job " << s->servers[i].jobs[j].id << " foi alocado ao Server " 
@@ -15,13 +14,14 @@ void printSolution(Solution* s){
                     << s->servers[i].jobs[j].tempo << " para ser executado." << std::endl;
         }
         std::cout << "O tempo gasto para processar todos os jobs alocados no server " << s->servers[i].id << " foi de: " 
-                    << s->timeSpentPerServer[i] << " unidades." << std::endl;
+                    << s->timeSpentPerServer[i] << " unidades," << " e o custo total de processamento no server é de: "<< s->servers[i].custoParaServidor << std::endl;
     }
     for(unsigned int i = 0; i < s->nonAllocatedJobs.size(); i++){
         std::cout << "O Job " << s->nonAllocatedJobs[i].id 
         << " não foi alocado em nenhum dos servidores externos, por isso, foi alocado no servidor local, com um custo de: "
         << s->nonAllocatedJobs[i].custo << std::endl;
     }
+    std::cout << "Logo, o custo total para esta solução é de: " << s->solutionCost << std::endl;
 }
 
 
@@ -67,7 +67,6 @@ Greedy::Greedy(JobXServer instance){
         servers.push_back(Server(i + 1, costAux, jobs, jobs.size()));
         costAux = 0;
         jobs.clear();
-        std::cout << "Quantidade de jobs no servidor " << i+1 << ": " << servers[i].jobs.size() << std::endl;
     }
 
     Solution* solution = (Solution*) std::calloc(1, sizeof(Solution));
@@ -88,7 +87,8 @@ Greedy::Greedy(JobXServer instance){
         }
     }
 
-    printSolution(solution);
+    //printSolution(solution);
+    std::cout << "Custo após guloso: " << solution->solutionCost << std::endl;
     this->solution = *solution;
 
     // prints the values for the sake of debugging

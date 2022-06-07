@@ -21,6 +21,7 @@ class Greedy{
         JobXServer data;
         Greedy(JobXServer instance);
         Greedy();
+        void printSolution(Solution*);
 
 };
 

@@ -5,10 +5,12 @@
 
 class Vnd{
     public:
-        Greedy guloso;
-        Vnd(Greedy*);
-        Solution* swapServer(Solution*, JobXServer*);
-        Solution* changeServer(Solution*, JobXServer*);
+        JobXServer data;
+        Solution solution;
+
+        Vnd(Solution, JobXServer);
+        Solution swapServer(Solution, JobXServer, bool*);
+        Solution changeServer(Greedy);
 };
 
 #endif
