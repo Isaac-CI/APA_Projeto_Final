@@ -69,3 +69,57 @@ Solution Vnd::swapServer(Solution solution, JobXServer data, bool* betterSolutio
 
     return solution;
 }
+
+Solution Vnd::reInsertionJob(Solution solution, JobXServer data, bool* betterSolutionFound){
+    int bestCost = solution.solutionCost;
+    int newCost;
+    *betterSolutionFound = false;
+
+    std::vector<Jobs> allJobs;
+
+    for(int i = 0 ; i < data.m; i++){
+        allJobs.insert(allJobs.end(), solution.servers[i].jobs.begin(), solution.servers[i].jobs.end());
+    }
+
+    allJobs.insert(allJobs.end(), solution.nonAllocatedJobs.begin(), solution.nonAllocatedJobs.end());
+
+    Jobs choosedJob = Jobs();
+    int newindexServer;
+    
+    for(int i = 0; i < allJobs.size(); i ++){
+        for(int j = 0; j < data.m; j++){
+            if((solution.timeSpentPerServer[j] + data.T[j][allJobs[i].id - 1]) <= data.b[solution.servers[j].id - 1]){ // checa se cabe
+                newCost = solution.solutionCost - allJobs[i].custo + data.C[j][allJobs[i].id - 1];
+                if( newCost < bestCost){
+                    bestCost = newCost; 
+                    choosedJob = allJobs[i];
+                    newindexServer = j + 1;
+                }
+            }
+        }
+    }
+
+    std::cout << "Novo melhor custo: " << bestCost << std::endl;
+    std::cout << newindexServer + 1 << std::endl;
+    std::cout << "Job " << choosedJob.id <<" alocado no servidor" << choosedJob.idServerAlloc << std::endl;
+
+    // std::cout <<"Custo total da solução do VND (Swaps only): " <<solution.solutionCost << std::endl;
+  
+    // for(int i = 0; i < solution.servers.size(); i++){
+    //     std::cout << "IDs dos jobs alocados no server" <<solution.servers[i].id << " :";
+    //     for(int j = 0; j <solution.servers[i].jobs.size(); j++){
+    //         std::cout << solution.servers[i].jobs[j].idServerAlloc << " ";
+    //     }
+    //      std::cout << "\n";
+    // }
+
+    // std::cout << "Id dos jobs nao alocados:";
+    // for(int i = 0; i < solution.nonAllocatedJobs.size(); i++){
+    //     std::cout <<  " " <<solution.nonAllocatedJobs[i].id;
+    // }
+    // std::cout << "\n";
+
+
+
+    return solution;
+}

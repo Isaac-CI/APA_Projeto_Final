@@ -3,6 +3,7 @@
 
 #include "Greedy.h"
 
+
 class Vnd{
     public:
         JobXServer data;
@@ -11,7 +12,7 @@ class Vnd{
         Vnd(Solution, JobXServer);
         Solution swapServer(Solution, JobXServer, bool*);
         Solution changeServer(Greedy);
-        Solution reInsertionJob();
+        Solution reInsertionJob(Solution, JobXServer, bool*);
 };
 
 #endif
