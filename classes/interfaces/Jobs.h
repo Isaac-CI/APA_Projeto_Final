@@ -3,8 +3,8 @@
 
 class Jobs{
     public:
-        int id, tempo, custo;
-        Jobs(int id, int tempo, int custo);
+        int id, tempo, custo, idServerAlloc;
+        Jobs(int id, int tempo, int custo, int idServerAlloc);
 };
 
 #endif

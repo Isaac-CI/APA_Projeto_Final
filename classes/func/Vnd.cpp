@@ -47,11 +47,15 @@ Solution Vnd::swapServer(Solution solution, JobXServer data, bool* betterSolutio
     }
     if(*betterSolutionFound){
         //swap solution[I][K] for solution[J][L]
-        Jobs aux = Jobs(solution.servers[newIndexJ].jobs[newIndexL].id, solution.servers[newIndexJ].jobs[newIndexL].tempo,
-            solution.servers[newIndexJ].jobs[newIndexL].custo);
-        solution.servers[newIndexJ].jobs[newIndexL] = solution.servers[newIndexI].jobs[newIndexK];
-        solution.servers[newIndexI].jobs[newIndexK] = aux;
-        //
+        Jobs aux1 = Jobs(solution.servers[newIndexJ].jobs[newIndexL].id, solution.servers[newIndexJ].jobs[newIndexL].tempo,
+            solution.servers[newIndexJ].jobs[newIndexL].custo, newIndexI + 1);
+
+        Jobs aux2 = Jobs(solution.servers[newIndexI].jobs[newIndexK].id, solution.servers[newIndexI].jobs[newIndexK].tempo,
+            solution.servers[newIndexI].jobs[newIndexK].custo, newIndexJ + 1);
+
+        solution.servers[newIndexJ].jobs[newIndexL] = aux2;
+        solution.servers[newIndexI].jobs[newIndexK] = aux1;
+        
 
         solution.solutionCost = newBestTotalCost;
         solution.servers[newIndexI].custoParaServidor = newBestCostI;
@@ -59,7 +63,7 @@ Solution Vnd::swapServer(Solution solution, JobXServer data, bool* betterSolutio
         solution.timeSpentPerServer[newIndexI] = newBestCostTimeServerI;
         solution.timeSpentPerServer[newIndexJ] = newBestCostTimeServerJ;
 
-        std::cout << "Custo após o swap: " << solution.solutionCost << std::endl;
+        //std::cout << "Custo após o swap: " << solution.solutionCost << std::endl;
 
     }
 

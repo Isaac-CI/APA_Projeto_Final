@@ -11,6 +11,7 @@ class Vnd{
         Vnd(Solution, JobXServer);
         Solution swapServer(Solution, JobXServer, bool*);
         Solution changeServer(Greedy);
+        Solution reInsertionJob();
 };
 
 #endif
