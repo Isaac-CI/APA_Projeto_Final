@@ -83,43 +83,43 @@ Solution Vnd::reInsertionJob(Solution solution, JobXServer data, bool* betterSol
 
     allJobs.insert(allJobs.end(), solution.nonAllocatedJobs.begin(), solution.nonAllocatedJobs.end());
 
-    Jobs choosedJob = Jobs();
-    int newindexServer;
     
+    int newindexServer, choosedJobindex, newCostAtServer;
+    bool found = false;
     for(int i = 0; i < allJobs.size(); i ++){
         for(int j = 0; j < data.m; j++){
             if((solution.timeSpentPerServer[j] + data.T[j][allJobs[i].id - 1]) <= data.b[solution.servers[j].id - 1]){ // checa se cabe
                 newCost = solution.solutionCost - allJobs[i].custo + data.C[j][allJobs[i].id - 1];
+                
                 if( newCost < bestCost){
-                    bestCost = newCost; 
-                    choosedJob = allJobs[i];
-                    newindexServer = j + 1;
+                    newindexServer = j;
+                    choosedJobindex = i;
+                    newCostAtServer = data.T[j][allJobs[i].id - 1];
+                    bestCost = newCost;
+                    found = true;
+                    // std::cout<< solution.solutionCost << " - " << allJobs[i].custo << "+" << + data.C[j][allJobs[i].id - 1] << " = " <<solution.solutionCost - allJobs[i].custo + data.C[j][allJobs[i].id - 1] << std::endl;
                 }
             }
         }
     }
 
-    std::cout << "Novo melhor custo: " << bestCost << std::endl;
-    std::cout << newindexServer + 1 << std::endl;
-    std::cout << "Job " << choosedJob.id <<" alocado no servidor" << choosedJob.idServerAlloc << std::endl;
+    Jobs choosedJob = allJobs[choosedJobindex];
+    std::cout << choosedJob.id << std::endl;
 
-    // std::cout <<"Custo total da solução do VND (Swaps only): " <<solution.solutionCost << std::endl;
-  
-    // for(int i = 0; i < solution.servers.size(); i++){
-    //     std::cout << "IDs dos jobs alocados no server" <<solution.servers[i].id << " :";
-    //     for(int j = 0; j <solution.servers[i].jobs.size(); j++){
-    //         std::cout << solution.servers[i].jobs[j].idServerAlloc << " ";
-    //     }
-    //      std::cout << "\n";
-    // }
+    if(found){
+        if(choosedJob.idServerAlloc == -1){
+            choosedJob.idServerAlloc = newindexServer + 1;
+            choosedJob.custo = newCostAtServer;
+            solution.solutionCost = bestCost;
+            solution.timeSpentPerServer[newindexServer] += choosedJob.custo;
+            solution.servers[newindexServer].jobs.push_back(choosedJob);
+            //solution.nonAllocatedJobs.erase(solution.nonAllocatedJobs.begin() + choosedJob.id - 1); // remove 
 
-    // std::cout << "Id dos jobs nao alocados:";
-    // for(int i = 0; i < solution.nonAllocatedJobs.size(); i++){
-    //     std::cout <<  " " <<solution.nonAllocatedJobs[i].id;
-    // }
-    // std::cout << "\n";
+        }else{
 
+        }
+    }
 
-
+    
     return solution;
 }
