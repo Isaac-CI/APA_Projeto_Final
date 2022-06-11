@@ -37,22 +37,22 @@ int main(void){
         VND.solution = VND.swapServer(VND.solution, instance, &flag);
     }
 
-    // bool flag2 = true;
+   bool flag2 = true;
 
-    // while(flag2){
-    //     VND.solution = VND.reInsertionJob(VND.solution, instance, &flag2);
+    while(flag2){
+        VND.solution = VND.reInsertionJob(VND.solution, instance, &flag2);
 
-    // }
+    }
 
     std::cout << "VND Solution" << std::endl;
     
-    std::cout <<"Custo total da solução do VND (Swaps only): " << VND.solution.solutionCost << std::endl;
+    std::cout <<"Custo total da solução do VND (Swaps and Reinsertion only): " << VND.solution.solutionCost << std::endl;
   
     for(int i = 0; i <  VND.solution.servers.size(); i++){
         std::cout << "IDs dos jobs alocados no server" << VND.solution.servers[i].id << " :";
         int cost = 0;
         for(int j = 0; j < VND.solution.servers[i].jobs.size(); j++){
-            cost += VND.solution.servers[i].jobs[j].custo;
+            cost += VND.solution.servers[i].jobs[j].tempo;
             std::cout <<  VND.solution.servers[i].jobs[j].id << " ";
         }
          std::cout << " Custo para p servidor: " << cost;

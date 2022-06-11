@@ -6,6 +6,15 @@ Vnd::Vnd(Solution solution, JobXServer data){
     this->data = data;
 }
 
+std::vector<Jobs> removeJob(std::vector<Jobs> jobs, int id){
+    for(int i = 0; i < jobs.size(); i++){
+        if(jobs[i].id == id){
+            jobs.erase(jobs.begin()+ i);
+        }
+    }
+    return jobs;
+}
+
 Solution Vnd::swapServer(Solution solution, JobXServer data, bool* betterSolutionFound){
     int newBestCostTimeServerI, newBestCostTimeServerJ,newTotalCost, newBestTotalCost = solution.solutionCost, newBestCostI, newBestCostJ;
     int newIndexK, newIndexL, newCostI, newCostJ, newIndexI, newIndexJ, newTimeServerI, newTimeServerJ;
@@ -85,42 +94,54 @@ Solution Vnd::reInsertionJob(Solution solution, JobXServer data, bool* betterSol
     allJobs.insert(allJobs.end(), solution.nonAllocatedJobs.begin(), solution.nonAllocatedJobs.end());
 
     
-    int newindexServer, choosedJobindex, newCostAtServer;
+    int newindexServer, choosedJobindex, newtimeAtServer, costAtServer;
     bool found = false;
+    Jobs choosedJob = Jobs();
     for(int i = 0; i < allJobs.size(); i ++){
         for(int j = 0; j < data.m; j++){
             if((solution.timeSpentPerServer[j] + data.T[j][allJobs[i].id - 1]) <= data.b[solution.servers[j].id - 1]){ // checa se cabe
                 newCost = solution.solutionCost - allJobs[i].custo + data.C[j][allJobs[i].id - 1];
-                
                 if( newCost < bestCost){
-                    newindexServer = j;
-                    choosedJobindex = i;
-                    newCostAtServer = data.T[j][allJobs[i].id - 1];
+                    choosedJob = allJobs[i];
+                    newindexServer = j + 1;
+                    newtimeAtServer = data.T[j][allJobs[i].id - 1];
+                    costAtServer =  data.C[j][allJobs[i].id - 1];
                     bestCost = newCost;
                     found = true;
-                    // std::cout<< solution.solutionCost << " - " << allJobs[i].custo << "+" << + data.C[j][allJobs[i].id - 1] << " = " <<solution.solutionCost - allJobs[i].custo + data.C[j][allJobs[i].id - 1] << std::endl;
+                    // std::cout<< solution.solutionCost << " - " << allJobs[i].custo << "+" << + data.C[j][allJobs[i].id - 1] << " = " <<solution.solutionCost - allJobs[i].custo + data.C[j][allJobs[i].id - 1] 
+                    // << " " << allJobs[i].id << " " <<  allJobs[i].idServerAlloc << std::endl;
+                        
                 }
+                
             }
         }
     }
 
-    Jobs choosedJob = allJobs[choosedJobindex];
-    std::cout << choosedJob.id << std::endl;
-
     if(found){
-        if(choosedJob.idServerAlloc == -1){
-            choosedJob.idServerAlloc = newindexServer + 1;
-            choosedJob.custo = newCostAtServer;
+        if(choosedJob.idServerAlloc == -1){ // job não alocado
+            choosedJob.tempo = newtimeAtServer;
+            choosedJob.custo = costAtServer;
+            choosedJob.idServerAlloc = newindexServer;
+            solution.servers[choosedJob.idServerAlloc - 1].jobs.push_back(choosedJob);
             solution.solutionCost = bestCost;
-            solution.timeSpentPerServer[newindexServer] += choosedJob.custo;
-            solution.servers[newindexServer].jobs.push_back(choosedJob);
-            //solution.nonAllocatedJobs.erase(solution.nonAllocatedJobs.begin() + choosedJob.id - 1); // remove 
+            solution.timeSpentPerServer[choosedJob.idServerAlloc - 1] += choosedJob.tempo;
+            solution.nonAllocatedJobs = removeJob(solution.nonAllocatedJobs, choosedJob.id);
+        }else{ // caso em que o job estava alocado
+            //remover do servidor antigo pelo id do job
+            solution.servers[choosedJob.idServerAlloc - 1].jobs = removeJob(solution.servers[choosedJob.idServerAlloc - 1].jobs, choosedJob.id);
+            solution.timeSpentPerServer[choosedJob.idServerAlloc - 1] -= choosedJob.tempo; //subtrai o tempo da alocação antiga nesse serve
 
-        }else{
+            //atualizar job com as informações referentes a alocação no novo servidor
+            choosedJob.tempo = newtimeAtServer;
+            choosedJob.custo = costAtServer;
+            choosedJob.idServerAlloc = newindexServer;
+            solution.servers[choosedJob.idServerAlloc - 1].jobs.push_back(choosedJob);
+            solution.solutionCost = bestCost;
+            solution.timeSpentPerServer[choosedJob.idServerAlloc - 1] += choosedJob.tempo;
+            solution.nonAllocatedJobs = removeJob(solution.nonAllocatedJobs, choosedJob.id);
 
         }
     }
 
-    
     return solution;
 }
