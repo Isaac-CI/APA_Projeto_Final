@@ -16,13 +16,13 @@ Solution Vnd::swapServer(Solution solution, JobXServer data, bool* betterSolutio
             for(unsigned int k = 0; k < solution.servers[i].jobs.size(); k++){
                 for(unsigned int l = 0; l < solution.servers[j].jobs.size(); l++){
                     newTimeServerI = solution.timeSpentPerServer[i] - solution.servers[i].jobs[k].tempo 
-                        + data.T[i][solution.servers[j].jobs[l].id];
+                        + data.T[i][solution.servers[j].jobs[l].id - 1];
                     newTimeServerJ = solution.timeSpentPerServer[j] - solution.servers[j].jobs[l].tempo 
-                        + data.T[j][solution.servers[i].jobs[k].id];
+                        + data.T[j][solution.servers[i].jobs[k].id - 1];
 
                     if(newTimeServerI < data.b[i] && newTimeServerJ < data.b[j]){
-                        newCostI = data.C[i][solution.servers[j].jobs[l].id] - data.C[i][solution.servers[i].jobs[k].id];
-                        newCostJ = data.C[j][solution.servers[i].jobs[k].id] - data.C[j][solution.servers[j].jobs[l].id];
+                        newCostI = data.C[i][solution.servers[j].jobs[l].id - 1] - data.C[i][solution.servers[i].jobs[k].id - 1];
+                        newCostJ = data.C[j][solution.servers[i].jobs[k].id - 1] - data.C[j][solution.servers[j].jobs[l].id - 1];
                         newTotalCost = solution.solutionCost + newCostI + newCostJ;
                         
                         if(newTotalCost < newBestTotalCost){
@@ -47,14 +47,15 @@ Solution Vnd::swapServer(Solution solution, JobXServer data, bool* betterSolutio
     }
     if(*betterSolutionFound){
         //swap solution[I][K] for solution[J][L]
-        Jobs aux1 = Jobs(solution.servers[newIndexJ].jobs[newIndexL].id, solution.servers[newIndexJ].jobs[newIndexL].tempo,
-            solution.servers[newIndexJ].jobs[newIndexL].custo, newIndexI + 1);
+        Jobs aux1 = Jobs(solution.servers[newIndexJ].jobs[newIndexL].id, data.T[solution.servers[newIndexI].id - 1][solution.servers[newIndexJ].jobs[newIndexL].id - 1],
+            data.C[solution.servers[newIndexI].id - 1][solution.servers[newIndexJ].jobs[newIndexL].id - 1], solution.servers[newIndexI].id);
 
-        Jobs aux2 = Jobs(solution.servers[newIndexI].jobs[newIndexK].id, solution.servers[newIndexI].jobs[newIndexK].tempo,
-            solution.servers[newIndexI].jobs[newIndexK].custo, newIndexJ + 1);
+        Jobs aux2 = Jobs(solution.servers[newIndexI].jobs[newIndexK].id, data.T[solution.servers[newIndexJ].id - 1][solution.servers[newIndexI].jobs[newIndexK].id - 1],
+            data.C[solution.servers[newIndexJ].id - 1][solution.servers[newIndexI].jobs[newIndexK].id - 1], solution.servers[newIndexJ].id);
 
-        solution.servers[newIndexJ].jobs[newIndexL] = aux2;
+        
         solution.servers[newIndexI].jobs[newIndexK] = aux1;
+        solution.servers[newIndexJ].jobs[newIndexL] = aux2;
         
 
         solution.solutionCost = newBestTotalCost;

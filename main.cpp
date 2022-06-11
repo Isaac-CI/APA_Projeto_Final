@@ -52,7 +52,7 @@ int main(void){
         std::cout << "IDs dos jobs alocados no server" << VND.solution.servers[i].id << " :";
         int cost = 0;
         for(int j = 0; j < VND.solution.servers[i].jobs.size(); j++){
-            cost += VND.solution.servers[i].jobs[j].tempo;
+            cost += VND.solution.servers[i].jobs[j].custo;
             std::cout <<  VND.solution.servers[i].jobs[j].id << " ";
         }
          std::cout << " Custo para p servidor: " << cost;
