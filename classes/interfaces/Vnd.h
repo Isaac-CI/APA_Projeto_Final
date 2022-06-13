@@ -1,7 +1,7 @@
 #ifndef VND_H
 #define VND_H
 
-#include "Greedy.h"
+#include "movements.h"
 
 
 class Vnd{
@@ -10,9 +10,6 @@ class Vnd{
         Solution solution;
 
         Vnd(Solution, JobXServer);
-        Solution swapServer(Solution, JobXServer, bool*);
-        Solution changeServer(Greedy);
-        Solution reInsertionJob(Solution, JobXServer, bool*);
 };
 
 #endif

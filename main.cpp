@@ -6,13 +6,10 @@
 
 
 int main(void){
-    bool flag = true;
-    JobXServer instance = JobXServer("./instances/input2.txt");  
+    JobXServer instance = JobXServer("./instances/input7.txt");  
 
     //instance.printProblemInput();
-    
     Greedy guloso = Greedy(instance);
-
     std::cout << "Greedy Solution" << std::endl;
 
     std::cout <<"Custo total da solução do Greedy: " << guloso.solution.solutionCost << std::endl;
@@ -22,6 +19,7 @@ int main(void){
         for(int j = 0; j < guloso.solution.servers[i].jobs.size(); j++){
             std::cout <<  guloso.solution.servers[i].jobs[j].id << " ";
         }
+            std::cout << "Custo total do servidor: " << guloso.solution.servers[i].custoParaServidor << " ";
             std::cout << "\n";
     } 
 
@@ -32,59 +30,27 @@ int main(void){
     std::cout << "\n";
 
     //-------------------------------- VND ---------------------------------------
-    Vnd VND = Vnd(guloso.solution, instance);
-    while(flag){
-        VND.solution = VND.swapServer(VND.solution, instance, &flag);
-    }
+    Movements moves = Movements(guloso.solution, instance);
+    Vnd VND = Vnd(moves.solution, moves.data);
 
-    std::cout << "VND Solution so para o swap" << std::endl;
-    
-    std::cout <<"Custo total da solução do VND (Swaps only): " << VND.solution.solutionCost << std::endl;
-  
-    for(int i = 0; i <  VND.solution.servers.size(); i++){
+        std::cout << "Solução alcançada pelo VND" << std::endl;
+        std::cout <<"Custo total da solução do VND: " << VND.solution.solutionCost << std::endl;
+        for(int i = 0; i <  VND.solution.servers.size(); i++){
         std::cout << "IDs dos jobs alocados no server" << VND.solution.servers[i].id << " :";
         int cost = 0;
         for(int j = 0; j < VND.solution.servers[i].jobs.size(); j++){
-            cost += VND.solution.servers[i].jobs[j].tempo;
+            cost += VND.solution.servers[i].jobs[j].custo;
             std::cout <<  VND.solution.servers[i].jobs[j].id << " ";
         }
          std::cout << " Custo para p servidor: " << cost;
          std::cout << "\n";
-    }
-
-    std::cout << "Id dos jobs nao alocados:";
-    for(int i = 0; i <  VND.solution.nonAllocatedJobs.size(); i++){
-        std::cout <<  " " << VND.solution.nonAllocatedJobs[i].id;
-    }
-    std::cout << "\n";
-
-   bool flag2 = true;
-
-    while(flag2){
-        VND.solution = VND.reInsertionJob(VND.solution, instance, &flag2);
-
-    }
-
-    std::cout << "VND Solution so para o swap e reinsertion" << std::endl;
-    
-    std::cout <<"Custo total da solução do VND (Swaps and Reinsertion): " << VND.solution.solutionCost << std::endl;
-  
-    for(int i = 0; i <  VND.solution.servers.size(); i++){
-        std::cout << "IDs dos jobs alocados no server" << VND.solution.servers[i].id << " :";
-        int cost = 0;
-        for(int j = 0; j < VND.solution.servers[i].jobs.size(); j++){
-            cost += VND.solution.servers[i].jobs[j].tempo;
-            std::cout <<  VND.solution.servers[i].jobs[j].id << " ";
         }
-         std::cout << " Custo para p servidor: " << cost;
-         std::cout << "\n";
-    }
 
-    std::cout << "Id dos jobs nao alocados:";
-    for(int i = 0; i <  VND.solution.nonAllocatedJobs.size(); i++){
-        std::cout <<  " " << VND.solution.nonAllocatedJobs[i].id;
-    }
-    std::cout << "\n";
-    
+        std::cout << "Id dos jobs nao alocados:";
+        for(int i = 0; i <  VND.solution.nonAllocatedJobs.size(); i++){
+            std::cout <<  " " << VND.solution.nonAllocatedJobs[i].id;
+        }
+        std::cout << "\n";
+
     return 0;
 }
