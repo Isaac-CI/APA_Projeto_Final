@@ -102,6 +102,7 @@ Solution Vnd::reInsertionJob(Solution solution, JobXServer data, bool* betterSol
             if((solution.timeSpentPerServer[j] + data.T[j][allJobs[i].id - 1]) <= data.b[solution.servers[j].id - 1]){ // checa se cabe
                 newCost = solution.solutionCost - allJobs[i].custo + data.C[j][allJobs[i].id - 1];
                 if( newCost < bestCost){
+                    *betterSolutionFound = true;
                     choosedJob = allJobs[i];
                     newindexServer = j + 1;
                     newtimeAtServer = data.T[j][allJobs[i].id - 1];

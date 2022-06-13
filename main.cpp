@@ -7,7 +7,7 @@
 
 int main(void){
     bool flag = true;
-    JobXServer instance = JobXServer("./instances/input2.txt");  
+    JobXServer instance = JobXServer("./instances/input7.txt");  
 
     //instance.printProblemInput();
     
@@ -85,6 +85,7 @@ int main(void){
         std::cout <<  " " << VND.solution.nonAllocatedJobs[i].id;
     }
     std::cout << "\n";
+    
     
     return 0;
 }
