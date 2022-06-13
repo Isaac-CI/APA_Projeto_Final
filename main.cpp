@@ -30,8 +30,7 @@ int main(void){
     std::cout << "\n";
 
     //-------------------------------- VND ---------------------------------------
-    Movements moves = Movements(guloso.solution, instance);
-    Vnd VND = Vnd(moves.solution, moves.data);
+    Vnd VND = Vnd(guloso.solution, guloso.data);
 
         std::cout << "Solução alcançada pelo VND" << std::endl;
         std::cout <<"Custo total da solução do VND: " << VND.solution.solutionCost << std::endl;

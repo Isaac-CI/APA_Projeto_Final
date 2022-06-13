@@ -3,6 +3,7 @@
 
 #include "JobXServer.h"
 #include "Server.h"
+#include <algorithm>
 
 
 struct Solution{
