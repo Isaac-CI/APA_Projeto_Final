@@ -15,10 +15,10 @@ Gap::Gap(Solution heuristicValue, int instanceID){
 }
 
 void Gap::printGap(){
-  double gap = ((this->heuristicValue.solutionCost-this->optimalValue)
+  double gap = (((double)this->heuristicValue.solutionCost-this->optimalValue)
     /this->optimalValue)*100;
   
   std::cout  << "Solução encontrada: " << this->heuristicValue.solutionCost << std::endl;
   std::cout  << "Solução ótima: " << this->optimalValue << std::endl;
-  std::cout  << gap << "%" << std::endl;
+  std::cout  << "Gap: " << gap << "%" << std::endl;
 }

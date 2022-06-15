@@ -1,12 +1,15 @@
 #include <iostream>
 #include <vector>
+#include <string.h>
 #include "./classes/interfaces/JobXServer.h"
 #include "./classes/interfaces/Greedy.h"
 #include "./classes/interfaces/Vnd.h"
+#include "./classes/interfaces/Gap.h"
 
+#define INSTANCE 7
 
 int main(void){
-    JobXServer instance = JobXServer("./instances/input8.txt");  
+    JobXServer instance = JobXServer("./instances/input7.txt");  
 
     //instance.printProblemInput();
     Greedy guloso = Greedy(instance);
@@ -51,6 +54,9 @@ int main(void){
         
         std::cout << "\n";
         std::cout <<"Custo total da solução do VND: " << VND.solution.solutionCost << std::endl;
+
+        Gap gap = Gap(VND.solution, INSTANCE);
+        gap.printGap();
 
     return 0;
 }
