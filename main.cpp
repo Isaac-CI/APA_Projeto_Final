@@ -6,7 +6,7 @@
 
 
 int main(void){
-    JobXServer instance = JobXServer("./instances/input8.txt");  
+    JobXServer instance = JobXServer("./instances/input7.txt");  
 
     //instance.printProblemInput();
     Greedy guloso = Greedy(instance);
@@ -36,11 +36,13 @@ int main(void){
         int total = 0;
         for(int i = 0; i <  VND.solution.servers.size(); i++){
             std::cout << "IDs dos jobs alocados no server" << VND.solution.servers[i].id << " :";
-            int cost = 0;
+            int time = 0;
             for(int j = 0; j < VND.solution.servers[i].jobs.size(); j++){
-                std::cout <<  VND.solution.servers[i].jobs[j].id << " ";
+                std::cout << "Id: " <<   VND.solution.servers[i].jobs[j].id << " (tempo pratico: " << VND.solution.servers[i].jobs[j].tempo << ")"
+                << " Tempo teorico: " << instance.T[VND.solution.servers[i].id -1][ VND.solution.servers[i].jobs[j].id - 1] << " ";
+                time += VND.solution.servers[i].jobs[j].tempo;
             }
-            std::cout << " Custo para o servidor: " << VND.solution.servers[i].custoParaServidor;
+            std::cout << " Tempo teorico para o servidor : " << time << " Tempo maximo para o servidor: " << instance.b[VND.solution.servers[i].id -1];
             std::cout << "\n";
         }
 
