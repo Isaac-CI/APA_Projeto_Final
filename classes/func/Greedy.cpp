@@ -3,27 +3,6 @@
 
 using namespace std;
 
-
-
-void Greedy::printSolution(Solution* s){
-    for(unsigned int i = 0; i < s->serverAmmount; i++){
-        for(unsigned int j = 0; j < s->servers[i].jobAmmount; j++){
-            std::cout << "O Job " << s->servers[i].jobs[j].id << " foi alocado ao Server " 
-                << s->servers[i].id << " custando " << s->servers[i].jobs[j].custo << " e demorando " 
-                    << s->servers[i].jobs[j].tempo << " para ser executado." << std::endl;
-        }
-        std::cout << "O tempo gasto para processar todos os jobs alocados no server " << s->servers[i].id << " foi de: " 
-                    << s->timeSpentPerServer[i] << " unidades," << " e o custo total de processamento no server é de: "<< s->servers[i].custoParaServidor << std::endl;
-    }
-    for(unsigned int i = 0; i < s->nonAllocatedJobs.size(); i++){
-        std::cout << "O Job " << s->nonAllocatedJobs[i].id 
-        << " não foi alocado em nenhum dos servidores externos, por isso, foi alocado no servidor local, com um custo de: "
-        << s->nonAllocatedJobs[i].custo << std::endl;
-    }
-    std::cout << "Logo, o custo total para esta solução é de: " << s->solutionCost << std::endl;
-}
-
-
 Greedy::Greedy(){
     this->data = NULL;
     this->solution.nonAllocatedJobs = {};
@@ -32,34 +11,31 @@ Greedy::Greedy(){
     this->solution.solutionCost = -1;
 }
 
-Greedy::Greedy(JobXServer instance){
-    this->data = instance;
-    int m = instance.m, n = instance.n;
-    std::vector <std::vector <int>> T = instance.T; //time
-    std::vector <std::vector <int>> C = instance.C; // costs
-    std::vector<int> b = instance.b; // server capabilities
+/*
+Greedy::Greedy(JobXServer data){
+    this->data = data;
 
     // data to work with: servers
 
     //first step: iterate for each server adding jobs given each server capacity
 
     std::vector <bool> isJobAssigned;
-    isJobAssigned.assign(n, false);
+    isJobAssigned.assign(data.n, false);
     std::vector <int> serverTimeSpent;
-    serverTimeSpent.assign(m, 0);
+    serverTimeSpent.assign(data.m, 0);
     std::vector <Server> servers;
     std::vector <Jobs> jobs;
     int costAux = 0;
 
 
-    for(unsigned int i = 0; i < m; i++){
-        for(unsigned int j = 0; j < n; j++){
+    for(unsigned int i = 0; i < data.m; i++){
+        for(unsigned int j = 0; j < data.n; j++){
             if(!isJobAssigned[j]){
-                if(T[i][j] + serverTimeSpent[i] <= b[i]){
-                    serverTimeSpent[i] += T[i][j];
+                if(data.T[i][j] + serverTimeSpent[i] <= data.b[i]){
+                    serverTimeSpent[i] += data.T[i][j];
                     isJobAssigned[j] = true;
-                    jobs.push_back(Jobs(j + 1, T[i][j], C[i][j], i+1));
-                    costAux += C[i][j];
+                    jobs.push_back(Jobs(j + 1, data.T[i][j], data.C[i][j], i+1));
+                    costAux += data.C[i][j];
                 }
             }
         }
@@ -70,38 +46,62 @@ Greedy::Greedy(JobXServer instance){
 
     Solution* solution = (Solution*) std::calloc(1, sizeof(Solution));
     solution->servers = servers;
-    solution->serverAmmount = m;
+    solution->serverAmmount = data.m;
     solution->solutionCost = 0;
-    solution->timeSpentPerServer.assign(m, 0);
-    for(unsigned int j = 0; j < n; j++){
+    solution->timeSpentPerServer.assign(data.m, 0);
+    for(unsigned int j = 0; j < data.n; j++){
         if(!isJobAssigned[j]){
-            solution->nonAllocatedJobs.push_back(Jobs(j+1, 0, instance.p, -1));
-            solution->solutionCost += instance.p;
+            solution->nonAllocatedJobs.push_back(Jobs(j+1, 0, data.p, -1));
+            solution->solutionCost += data.p;
         }
     }
-    for(unsigned int i = 0; i < m; i++){
+    for(unsigned int i = 0; i < data.m; i++){
         solution->solutionCost += servers[i].custoParaServidor;
         for(unsigned int j = 0; j < servers[i].jobAmmount; j++){
             solution->timeSpentPerServer[i] += servers[i].jobs[j].tempo;
         }
     }
 
-    //printSolution(solution);
-    //std::cout << "Custo após guloso: " << solution->solutionCost << std::endl;
     this->solution = *solution;
-
-
-    // for(int i = 0; i < servers.size(); i++){
-    //     std::cout << solution->servers[i].id << std::endl;
-    // }
-
-    // prints the values for the sake of debugging
-    // for(int i = 0;i < m; i++){
-    //     for(int j = 0; j < n; j++){
-    //         std::cout << servers[i].jobs[j].id << " "<<servers[i].jobs[j].tempo << std::endl;
-    //     }
-    //     std::cout << "\n";
-    // }
-
 }
+*/
+Greedy::Greedy(JobXServer data){
+    this->data = data;
 
+    std::vector <Jobs> jobList;
+    std::vector <Jobs> jobAux;
+    std::vector <Server> serverAux;
+    std::vector <int> timePerServer;
+    
+    for(int i = 0; i < data.n; i++){
+        jobList.push_back(Jobs(i + 1, 0, data.p, -1));
+    }
+    int serverTimeSpent, costPerServer, totalCost = 0;
+    for(int i = 0; i < data.m; i++){
+        serverTimeSpent = 0;
+        costPerServer = 0;
+        
+        for(int j = 0; j < jobList.size(); j++){
+            if(data.T[i][jobList[j].id - 1] + serverTimeSpent < data.b[i]){
+                serverTimeSpent += data.T[i][j];
+                jobAux.push_back(Jobs(jobList[j].id, data.T[i][jobList[j].id - 1], data.C[i][jobList[j].id - 1], i + 1));
+                costPerServer += data.C[i][jobList[j].id - 1]; 
+                jobList.erase(jobList.begin() + j);
+                j--;
+            }
+        }
+        
+        totalCost += costPerServer;
+        timePerServer.push_back(serverTimeSpent);
+        serverAux.push_back(Server(i + 1, costPerServer, jobAux, jobAux.size()));
+        jobAux.clear();
+    }
+    
+    Solution* solution = new Solution;
+    solution->servers = serverAux;
+    solution->solutionCost = totalCost + (jobList.size() * data.p);
+    solution->nonAllocatedJobs = jobList;
+    solution->timeSpentPerServer = timePerServer;
+    this->solution = *solution;
+    delete solution;
+}

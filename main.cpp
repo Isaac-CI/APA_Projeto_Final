@@ -6,7 +6,7 @@
 
 
 int main(void){
-    JobXServer instance = JobXServer("./instances/input7.txt");  
+    JobXServer instance = JobXServer("./instances/input8.txt");  
 
     //instance.printProblemInput();
     Greedy guloso = Greedy(instance);
@@ -33,23 +33,24 @@ int main(void){
     Vnd VND = Vnd(guloso.solution, guloso.data);
 
         std::cout << "Solução alcançada pelo VND" << std::endl;
-        std::cout <<"Custo total da solução do VND: " << VND.solution.solutionCost << std::endl;
+        int total = 0;
         for(int i = 0; i <  VND.solution.servers.size(); i++){
-        std::cout << "IDs dos jobs alocados no server" << VND.solution.servers[i].id << " :";
-        int cost = 0;
-        for(int j = 0; j < VND.solution.servers[i].jobs.size(); j++){
-            cost += VND.solution.servers[i].jobs[j].custo;
-            std::cout <<  VND.solution.servers[i].jobs[j].id << " ";
-        }
-         std::cout << " Custo para p servidor: " << cost;
-         std::cout << "\n";
+            std::cout << "IDs dos jobs alocados no server" << VND.solution.servers[i].id << " :";
+            int cost = 0;
+            for(int j = 0; j < VND.solution.servers[i].jobs.size(); j++){
+                std::cout <<  VND.solution.servers[i].jobs[j].id << " ";
+            }
+            std::cout << " Custo para o servidor: " << VND.solution.servers[i].custoParaServidor;
+            std::cout << "\n";
         }
 
         std::cout << "Id dos jobs nao alocados:";
         for(int i = 0; i <  VND.solution.nonAllocatedJobs.size(); i++){
             std::cout <<  " " << VND.solution.nonAllocatedJobs[i].id;
         }
+        
         std::cout << "\n";
+        std::cout <<"Custo total da solução do VND: " << VND.solution.solutionCost << std::endl;
 
     return 0;
 }
