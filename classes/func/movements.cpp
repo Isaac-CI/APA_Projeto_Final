@@ -100,7 +100,7 @@ Solution Movements::reInsertionJob(Solution solution, JobXServer data, bool* bet
     }
     for(int j = 0; j < solution.nonAllocatedJobs.size(); j++){
         for(int i = 0; i < data.m; i++){
-            if(solution.timeSpentPerServer[i] + data.T[i][solution.nonAllocatedJobs[j].id - 1] < data.b[i]){
+            if(solution.timeSpentPerServer[i] + data.T[i][solution.nonAllocatedJobs[j].id - 1] <= data.b[i]){
                 newTotalCost = solution.solutionCost + data.C[i][solution.nonAllocatedJobs[j].id - 1] - data.p;
                 if(newTotalCost < bestTotalCost){
                     *betterSolutionFound = true;

@@ -6,6 +6,7 @@
 
 class Vnd{
     public:
+        std::chrono::microseconds executionTime;
         JobXServer data;
         Solution solution;
 

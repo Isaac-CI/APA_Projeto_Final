@@ -3,6 +3,9 @@
 
 #include "JobXServer.h"
 #include "Server.h"
+#include <time.h>
+#include <chrono>
+#include <cstdlib>
 #include <algorithm>
 
 
@@ -12,7 +15,6 @@ struct Solution{
     std::vector  <int> timeSpentPerServer;
     int solutionCost;
     int serverAmmount;
-    //bool isValid;
 };
 
 

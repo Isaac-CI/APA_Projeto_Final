@@ -15,14 +15,20 @@ ILS::ILS(JobXServer data){
     Greedy guloso = Greedy(data);
     history.push_back(guloso.solution);
     Vnd VND = Vnd(guloso.solution, data);
+    Solution* best = new Solution;
     history.push_back(VND.solution);
-    int iterationsWithoutBetterSolution = 0;
-    while(iterationsWithoutBetterSolution < THRESHOLD){
-        iterationsWithoutBetterSolution++;
+    int lastIterationWithBetterSolution = 0;
+    int currentIteration = 0;
+    while(currentIteration - lastIterationWithBetterSolution < THRESHOLD){
+        currentIteration++;
         VND = Vnd(ripple(history.back()), data);
+        if(VND.solution.solutionCost < best->solutionCost){
+            lastIterationWithBetterSolution = currentIteration;
+            *best = VND.solution;
+        }
         history.push_back(VND.solution);
     }
-    std::sort(history.begin(), history.end(), compareSolutionCosts);
     this->history = history;
-    this->bestFound = history.front();
+    this->bestFound = *best;
+    delete(best);
 }
