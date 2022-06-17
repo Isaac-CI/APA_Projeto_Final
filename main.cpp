@@ -1,15 +1,22 @@
 #include <iostream>
 #include <vector>
+#include <string.h>
 #include "./classes/interfaces/JobXServer.h"
 #include "./classes/interfaces/Greedy.h"
 #include "./classes/interfaces/Vnd.h"
 #include "./classes/interfaces/Grasp.h"
+#include "./classes/interfaces/Gap.h"
 
 #define THRESHOLD 10
+#define INSTANCE 7
 
 int main(void){
+<<<<<<< HEAD
     srand(time(NULL));
     JobXServer instance = JobXServer("./instances/input8.txt");  
+=======
+    JobXServer instance = JobXServer("./instances/input7.txt");  
+>>>>>>> 1969e6d73be47a2ea4e854cad8931b9db4018330
 
     auto greedStart = std::chrono::high_resolution_clock::now();
     Greedy guloso = Greedy(instance);
@@ -46,6 +53,9 @@ int main(void){
         auto GraspDuration = std::chrono::duration_cast<std::chrono::microseconds>(stopGrasp - startGrasp);
         std::cout << "Solução alcançada pelo grasp VND em " << GraspDuration.count() << " us: " << std::endl;
         std::cout << "Custo do médio do Grasp VND: " << best.solutionCost << std::endl;
+
+        Gap gap = Gap(VND.solution, INSTANCE);
+        gap.printGap();
 
     return 0;
 }
