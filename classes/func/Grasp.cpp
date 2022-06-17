@@ -6,7 +6,6 @@ Grasp::Grasp(JobXServer data){
 }
 
 Solution Grasp::RSG(JobXServer data){
-    srand(time(NULL));
     Solution solution;
     solution.serverAmmount = data.m;
     solution.solutionCost = 0;
